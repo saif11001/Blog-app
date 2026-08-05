@@ -14,11 +14,11 @@ export default function RootLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-(--bg-primary)">
+    <div className="flex h-dvh overflow-hidden bg-(--bg-primary)">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <div className="flex flex-col w-full h-screen overflow-y-auto">
-        <div className="h-20 flex items-center justify-between w-full px-4 sm:px-12 border-b border-(--border-color) bg-(--bg-primary) sticky top-0 z-10">
+      <div className="flex flex-col w-full h-dvh overflow-y-auto">
+        <div className="h-20 flex items-center justify-between w-full px-4 sm:px-12 border-b border-(--border-color) bg-(--bg-primary) sticky top-0 z-10 shrink-0">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
@@ -33,7 +33,7 @@ export default function RootLayout({
           </div>
           <div className="flex items-center gap-4">
               <ThemeToggle />
-              <Image src={assets.profile_icon} alt="" width={36} className="rounded-full" />
+              <Image src={assets.profile_icon} alt="" width={36} height={36} className="rounded-full" />
           </div>
         </div>
         {children}

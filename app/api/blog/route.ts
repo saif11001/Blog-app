@@ -17,35 +17,53 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-    await connectDB();
+    try {
+        await connectDB();
 
-    const formData = await request.formData();
-    const image = formData.get("image") as File;
-    const imageByteData = await image.arrayBuffer();
-    const buffer = Buffer.from(imageByteData);
+        const formData = await request.formData();
+        const image = formData.get("image") as File;
 
-    const uploadResult = await new Promise<any>((resolve, reject) => {
-        cloudinary.uploader
-            .upload_stream({ folder: "blog-app" }, (error, result) => {
-                if (error) reject(error);
-                else resolve(result);
-            })
-            .end(buffer);
-    });
+        if (!image) {
+            return NextResponse.json({ success: false, message: "No image provided" }, { status: 400 });
+        }
 
-    const blogData = {
-        title: `${formData.get('title')}`,
-        description: `${formData.get('description')}`,
-        category: `${formData.get('category')}`,
-        author: `${formData.get('author')}`,
-        image: uploadResult.secure_url,
-        imagePublicId: uploadResult.public_id,
-        authorImg: `${formData.get('authorImg')}`,
-    };
+        const imageByteData = await image.arrayBuffer();
+        const buffer = Buffer.from(imageByteData);
 
-    await Blog.create(blogData);
+        const uploadResult = await new Promise<any>((resolve, reject) => {
+            cloudinary.uploader
+                .upload_stream({ folder: "blog-app" }, (error, result) => {
+                    if (error) {
+                        // Log the FULL error so we can see the real reason (bad api key, cloud_name mismatch, etc.)
+                        console.error("Cloudinary upload error:", error);
+                        reject(error);
+                    } else {
+                        resolve(result);
+                    }
+                })
+                .end(buffer);
+        });
 
-    return NextResponse.json({ success: true, message: "Blog Added" });
+        const blogData = {
+            title: `${formData.get('title')}`,
+            description: `${formData.get('description')}`,
+            category: `${formData.get('category')}`,
+            author: `${formData.get('author')}`,
+            image: uploadResult.secure_url,
+            imagePublicId: uploadResult.public_id,
+            authorImg: `${formData.get('authorImg')}`,
+        };
+
+        await Blog.create(blogData);
+
+        return NextResponse.json({ success: true, message: "Blog Added" });
+    } catch (error: any) {
+        console.error("POST /api/blog failed:", error);
+        return NextResponse.json(
+            { success: false, message: error?.message || "Something went wrong while adding the blog" },
+            { status: 500 }
+        );
+    }
 }
 
 export async function DELETE(request: NextRequest) {

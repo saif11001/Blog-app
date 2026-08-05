@@ -8,8 +8,10 @@ import { toast } from "react-toastify";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Header () {
-    
+
     const [email, setEmail] = useState("");
+    const [menuOpen, setMenuOpen] = useState(false);
+
     const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData();
@@ -44,7 +46,66 @@ export default function Header () {
                     <button className="hidden sm:flex items-center gap-2 text-sm font-medium py-2 px-5 border border-(--border-color) rounded-full hover:bg-(--bg-secondary) transition-colors">
                         Subscribe
                     </button>
+
+                    {/* Mobile menu toggle button - only visible below md breakpoint */}
+                    <button
+                        type="button"
+                        onClick={() => setMenuOpen((prev) => !prev)}
+                        aria-label="Toggle menu"
+                        aria-expanded={menuOpen}
+                        className="md:hidden flex items-center justify-center w-9 h-9 rounded-full border border-(--border-color) text-(--text-primary) hover:bg-(--bg-secondary) transition-colors"
+                    >
+                        {menuOpen ? (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                        ) : (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="3" y1="6" x2="21" y2="6" />
+                                <line x1="3" y1="12" x2="21" y2="12" />
+                                <line x1="3" y1="18" x2="21" y2="18" />
+                            </svg>
+                        )}
+                    </button>
                 </div>
+            </div>
+
+            {/* Mobile dropdown menu */}
+            <div
+                className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+                    menuOpen ? "max-h-60 opacity-100" : "max-h-0 opacity-0"
+                }`}
+            >
+                <nav className="flex flex-col gap-1 px-5 pb-5 text-sm font-medium text-(--text-secondary)">
+                    <a
+                        href="/"
+                        onClick={() => setMenuOpen(false)}
+                        className="py-3 border-b border-(--border-color) hover:text-(--text-primary) transition-colors"
+                    >
+                        Home
+                    </a>
+                    <a
+                        href="/admin"
+                        onClick={() => setMenuOpen(false)}
+                        className="py-3 border-b border-(--border-color) hover:text-(--text-primary) transition-colors"
+                    >
+                        Admin
+                    </a>
+                    <a
+                        href="#"
+                        onClick={() => setMenuOpen(false)}
+                        className="py-3 border-b border-(--border-color) hover:text-(--text-primary) transition-colors"
+                    >
+                        About
+                    </a>
+                    <button
+                        onClick={() => setMenuOpen(false)}
+                        className="mt-3 flex items-center justify-center gap-2 text-sm font-medium py-2 px-5 border border-(--border-color) rounded-full hover:bg-(--bg-secondary) transition-colors sm:hidden"
+                    >
+                        Subscribe
+                    </button>
+                </nav>
             </div>
 
             <div className="text-center px-5 pb-16 pt-6">
