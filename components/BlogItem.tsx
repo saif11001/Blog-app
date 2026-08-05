@@ -1,4 +1,3 @@
-import { assets } from "@/Assets/assets";
 import Image from "next/image";
 import Link from "next/link";
 import DOMPurify from "isomorphic-dompurify"
@@ -15,20 +14,28 @@ interface BlogItemProps {
 
 export default function BlogItem ({ item } : BlogItemProps) {
     return (
-        <div className="max-w-82.5 sm:max-w-75 bg-white border border-black hover:shadow-[-7px_7px_0px_#000000]">
-            <Link href={`/blogs/${item._id}`}>
-                <Image src={item.image} alt={item.title} width={400} height={400} className="border-b border-black"/>
-            </Link>
-            <p className="ml-5 mt-5 px-1 inline-block bg-black text-white text-sm">{item.category}</p>
-            <div className="p-5">
-                <h5 className="mb-2 text-lg font-medium tracking-tight text-gray-900">{item.title}</h5>
-                <p className="mb-3 text-sm tracking-tight text-gray-700" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(item.description.slice(0,120))}}></p>
-                <Link href={`/blogs/${item._id}`}>
-                    <div className="inline-flex items-center py-2 font-semibold text-center">
-                        Read More <Image src={assets.arrow} className="ml-2" alt="" width={12}/>
-                    </div>
-                </Link>
+        <Link href={`/blogs/${item._id}`} className="group relative block rounded-2xl overflow-hidden h-80">
+            <Image
+                src={item.image}
+                alt={item.title}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+
+            <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/10 to-transparent"></div>
+
+            <div className="absolute bottom-0 left-0 right-0 p-5">
+                <span className="inline-block bg-white/15 backdrop-blur-sm text-white text-xs font-medium px-3 py-1 rounded-full mb-3">
+                    {item.category}
+                </span>
+                <h5 className="text-white text-lg font-semibold leading-snug line-clamp-2 mb-2">
+                    {item.title}
+                </h5>
+                <p
+                    className="text-white/70 text-sm line-clamp-2"
+                    dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(item.description.slice(0,120))}}
+                ></p>
             </div>
-        </div>
+        </Link>
     )
 };

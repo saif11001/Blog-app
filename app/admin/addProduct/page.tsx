@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 
 export default function Page() {
     const [image, setImage] = useState<File | null>(null);
+    const [loading, setLoading] = useState(false);
     const [data, setData] = useState({
         title: "",
         description: "",
@@ -37,6 +38,7 @@ export default function Page() {
         }
         formData.append("image", image);
 
+        setLoading(true);
         try {
             const response = await axios.post('/api/blog', formData);
 
@@ -55,30 +57,83 @@ export default function Page() {
             }
         } catch (error) {
             toast.error("Something went wrong");
+        } finally {
+            setLoading(false);
         }
     }
 
     return (
-        <>
-            <form onSubmit={onSubmitHandler} className="pt-5 px-5 sm:pt-12 sm:pl-16">
-                <p className="text-xl">Upload thumbnail</p>
-                <label htmlFor="image">
-                    <Image className="mt-4" style={{ width: '140px', height: 'auto' }} src={image ? URL.createObjectURL(image) : assets.upload_area} alt="" width={140} height={70} />
-                </label>
-                <input type="file" id="image" hidden required onChange={(e) => { if (e.target.files?.[0]) setImage(e.target.files[0]) }} />
-                <p className="text-xl mt-4">Blog Title</p>
-                <input name="title" onChange={onChangeHandler} value={data.title} className="w-full sm:w-125 mt-4 px-4 py-3 border" type="text" placeholder="Type here" required />
-                <p className="text-xl mt-4">Blog Description</p>
-                <textarea name="description" onChange={onChangeHandler} value={data.description} className="w-full sm:w-125 mt-4 px-4 py-3 border" placeholder="Write content here" rows={6} required />
-                <p className="text-xl mt-4">Blog Category</p>
-                <select name="category" onChange={onChangeHandler} value={data.category} className="w-40 mt-4 px-4 py-3 border text-gray-500">
-                    <option value="Startup">Startup</option>
-                    <option value="Technology">Technology</option>
-                    <option value="Lifestyle">Lifestyle</option>
-                </select>
-                <br />
-                <button type="submit" className="mt-8 w-40 h-12 bg-black text-white">ADD</button>
+        <div className="pt-5 px-5 sm:pt-12 sm:px-16 pb-16">
+            <form onSubmit={onSubmitHandler} className="addblog-grid max-w-4xl">
+
+                <div className="area-title">
+                    <p className="text-sm font-medium text-(--text-secondary) mb-3">Blog Title</p>
+                    <input
+                        name="title"
+                        onChange={onChangeHandler}
+                        value={data.title}
+                        className="w-full px-4 py-3 rounded-xl border border-(--border-color) bg-(--bg-secondary) text-(--text-primary) outline-none focus:border-(--text-secondary) transition-colors"
+                        type="text"
+                        placeholder="Type here"
+                        required
+                    />
+                </div>
+
+                <div className="area-desc">
+                    <p className="text-sm font-medium text-(--text-secondary) mb-3">Blog Description</p>
+                    <textarea
+                        name="description"
+                        onChange={onChangeHandler}
+                        value={data.description}
+                        className="w-full px-4 py-3 rounded-xl border border-(--border-color) bg-(--bg-secondary) text-(--text-primary) outline-none focus:border-(--text-secondary) transition-colors"
+                        placeholder="Write content here"
+                        rows={8}
+                        required
+                    />
+                </div>
+
+                <div className="area-image flex flex-col h-full">
+                    <p className="text-sm font-medium text-(--text-secondary) mb-3">Upload thumbnail</p>
+                    <label htmlFor="image" className="cursor-pointer block flex-1">
+                        <div className="w-full h-56 lg:h-full rounded-2xl border border-dashed border-(--border-color) bg-(--bg-secondary) flex items-center justify-center overflow-hidden">
+                            <Image
+                                style={{ width: '100%', height: '100%', objectFit: image ? 'cover' : 'contain' }}
+                                src={image ? URL.createObjectURL(image) : assets.upload_area}
+                                alt=""
+                                width={300}
+                                height={300}
+                                className={!image ? "p-10 opacity-60 dark:invert" : ""}
+                            />
+                        </div>
+                    </label>
+                    <input type="file" id="image" hidden required onChange={(e) => { if (e.target.files?.[0]) setImage(e.target.files[0]) }} accept="image/*" />
+                </div>
+
+                <div className="area-catrow flex items-center justify-between">
+                    <div>
+                        <p className="text-sm font-medium text-(--text-secondary) mb-3">Blog Category</p>
+                        <select
+                            name="category"
+                            onChange={onChangeHandler}
+                            value={data.category}
+                            className="w-44 px-4 py-3 rounded-xl border border-(--border-color) bg-(--bg-secondary) text-(--text-primary) outline-none focus:border-(--text-secondary) transition-colors"
+                        >
+                            <option value="Startup">Startup</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Lifestyle">Lifestyle</option>
+                        </select>
+                    </div>
+
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="px-8 py-3 rounded-full bg-(--text-primary) text-(--bg-primary) font-medium disabled:opacity-60 transition-opacity self-end"
+                    >
+                        {loading ? "Adding..." : "Add Blog"}
+                    </button>
+                </div>
+
             </form>
-        </>
+        </div>
     )
 }

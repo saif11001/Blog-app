@@ -4,6 +4,7 @@ import Image from "next/image";
 import { use, useEffect, useState } from "react";
 import { assets } from "@/Assets/assets";
 import Footer from "@/components/Footer";
+import ThemeToggle from "@/components/ThemeToggle";
 import Link from "next/link";
 import axios from "axios";
 import DOMPurify from "isomorphic-dompurify"
@@ -42,40 +43,84 @@ export default function Page ({params}: PageProps) {
     useEffect(() => {
         fetchData();
     }, [id])
+
+    const formattedDate = data
+        ? new Date(data.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
+        : "";
     
     return (
-        data ? <>
-            <div className="bg-gray-200 py-5 px-5 md:px-12 lg:px-28">
-                <div className="flex justify-between items-center">
-                    <Link href="/">
-                        <Image src={assets.logo} alt="" width={180} className="w-32.5 sm:w-auto"/>
+        data ? <div className="bg-(--bg-primary) min-h-screen flex flex-col">
+
+            <div className="flex justify-between items-center px-5 md:px-12 lg:px-28 py-5 border-b border-(--border-color)">
+                <Link href="/" className="flex items-center gap-2">
+                    <Image src={assets.logo} width={150} height={150} alt="Logo" className="dark:invert" />
+                </Link>
+                <div className="flex items-center gap-3">
+                    <ThemeToggle />
+                    <Link
+                        href="/"
+                        className="hidden sm:block text-sm font-medium py-2 px-5 border border-(--border-color) rounded-full hover:bg-(--bg-secondary) transition-colors text-(--text-primary)"
+                    >
+                        Back to Home
                     </Link>
-                    <button className="flex items-center gap-2 font-medium py-1 px-3 sm:py-3 sm:px-6 border border-black shadow-[-7px_7px_0px_#000000]">
-                        Get Started <Image src={assets.arrow} alt=""/>
-                    </button>
-                </div>
-                <div className="text-center my-24">
-                    <h1 className="text-2xl sm:text-5xl font-semibold max-w-175 mx-auto">{data.title}</h1>
-                    <Image className="mx-auto mt-6 border border-white rounded-full" src={data.authorImg} alt="" width={60} height={60} />
-                    <p className="mt-1 pb-2 text-lg max-w-185 mx-auto">{data.author}</p>
                 </div>
             </div>
-            <div className="mx-5 max-w-200 md:mx-auto -mt-25 mb-10">
-                <Image className="border-4 border-white" src={data.image} alt="" width={1280} height={720} />
-                <h1 className="my-8 text-[26px] font-semibold">Introduction:</h1>
-                <div className="blog-content" dangerouslySetInnerHTML={{__html:DOMPurify.sanitize(data.description)}}></div>
 
-                <div className="my-24">
-                    <p className="text-black font font-semibold my-4">Share this articleon social media</p>
-                    <div className="flex">
-                        <Image src={assets.facebook_icon} alt="" width={50}/>
-                        <Image src={assets.twitter_icon} alt="" width={50}/>
-                        <Image src={assets.googleplus_icon} alt="" width={50}/>
+            <div className="flex-1 px-5 py-16 max-w-3xl mx-auto w-full">
+
+                <div className="text-center mb-10">
+                    <span className="inline-block bg-(--bg-secondary) text-(--text-secondary) text-xs font-medium px-3 py-1 rounded-full mb-5 uppercase tracking-wide">
+                        {data.category}
+                    </span>
+                    <h1 className="text-3xl sm:text-5xl font-semibold leading-tight text-(--text-primary) mb-6">
+                        {data.title}
+                    </h1>
+                    <div className="flex items-center justify-center gap-3">
+                        <Image
+                            className="rounded-full object-cover"
+                            src={data.authorImg}
+                            alt=""
+                            width={58}
+                            height={58}
+                        />
+                        <div className="text-sm text-left">
+                            <p className="text-(--text-primary) font-medium">{data.author}</p>
+                            <p className="text-(--text-secondary)">{formattedDate}</p>
+                        </div>
                     </div>
                 </div>
+
+                <div className="border border-(--border-color) rounded-2xl overflow-hidden bg-(--bg-secondary)">
+                    <div className="relative w-full h-64 sm:h-96">
+                        <Image
+                            className="object-cover"
+                            src={data.image}
+                            alt={data.title}
+                            fill
+                        />
+                    </div>
+
+                    <div className="p-6 sm:p-10">
+                        <div
+                            className="blog-content text-(--text-primary) leading-relaxed"
+                            dangerouslySetInnerHTML={{__html:DOMPurify.sanitize(data.description)}}
+                        ></div>
+
+                        <div className="mt-12 pt-8 border-t border-(--border-color) text-center">
+                            <p className="text-(--text-secondary) text-sm font-medium mb-4">Share this article</p>
+                            <div className="flex gap-3 justify-center">
+                                <Image src={assets.facebook_icon} alt="" width={36}/>
+                                <Image src={assets.twitter_icon} alt="" width={36}/>
+                                <Image src={assets.googleplus_icon} alt="" width={36}/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+
             <Footer />
-        </> :
-        <></>
+        </div> :
+        <div className="min-h-screen bg-(--bg-primary)"></div>
     )
 }

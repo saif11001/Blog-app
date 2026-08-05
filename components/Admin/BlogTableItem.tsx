@@ -11,24 +11,26 @@ interface BlogTableItemProps {
 }
 
 export default function BlogTableItem ({ authorImg, title, mongoId, author, date, deleteBlog }: BlogTableItemProps ) {
+    const formattedDate = new Date(date).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+
     return (
-        <tr className="bg-white border-b">
-            <th scope="row" className="items-center gap-3 hidden sm:flex px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                <Image className="rounded-full" src={authorImg ? authorImg : assets.profile_icon} alt="" width={40} height={40} />
+        <tr className="bg-(--bg-primary) hover:bg-(--bg-secondary) transition-colors">
+            <th scope="row" className="items-center gap-3 hidden sm:flex px-6 py-4 font-medium text-(--text-primary) whitespace-nowrap">
+                <Image className="rounded-full" src={authorImg ? authorImg : assets.profile_icon} alt="" width={36} height={36} />
                 <p>{author ? author : "No author" }</p>
             </th>
-            <td className="px-6 py-4">
-                {title ? title : "no titlez"}
+            <td className="px-6 py-4 text-(--text-primary)">
+                {title ? title : "Untitled"}
+            </td>
+            <td className="px-6 py-4 text-(--text-secondary)">
+                {formattedDate}
             </td>
             <td className="px-6 py-4">
-                {date}
-            </td>
-            <td className="px-6 py-4 cursor-pointer">
                 <button
                     onClick={() => deleteBlog(mongoId)}
-                    className="text-red-600 hover:underline cursor-pointer"
+                    className="text-red-500 hover:underline cursor-pointer text-sm font-medium"
                 >
-                    x
+                    Delete
                 </button>
             </td>
         </tr>

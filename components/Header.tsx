@@ -5,6 +5,7 @@ import axios from "axios";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Header () {
     
@@ -26,19 +27,42 @@ export default function Header () {
     }
 
     return (
-        <div className="py-5 px-5 md:px-12 lg:px-28">
-            <div className="flex justify-between items-center">
-                <Image src={assets.logo} width={180} alt="Logo" className="w-32.5 sm:w-auto"/>
-                <button className="flex items-center gap-2 font-medium py-1 px-3 sm:py-3 sm:px-6 border border-solid border-black shadow-[-7px_7px_0px_#000000]">
-                    Get started <Image src={assets.arrow} alt="Arrow" />
-                </button>
+        <div className="bg-[varbg-(--bg-primary) text-(--text-primary) border-b border-(--border-color)">
+            <div className="flex justify-between items-center px-5 md:px-12 lg:px-28 py-5">
+                <div className="flex items-center gap-2">
+                    <Image src={assets.logo} width={150} height={150} alt="Logo" className="dark:invert" />
+                </div>
+
+                <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-(--text-secondary)">
+                    <a href="/" className="hover:text-(--text-primary) transition-colors">Home</a>
+                    <a href="/admin" className="hover:text-(--text-primary) transition-colors">Admin</a>
+                    <a href="#" className="hover:text-(--text-primary) transition-colors">About</a>
+                </nav>
+
+                <div className="flex items-center gap-3">
+                    <ThemeToggle />
+                    <button className="hidden sm:flex items-center gap-2 text-sm font-medium py-2 px-5 border border-(--border-color) rounded-full hover:bg-(--bg-secondary) transition-colors">
+                        Subscribe
+                    </button>
+                </div>
             </div>
-            <div className="text-center my-8">
-                <h1 className="text-3xl sm:text-5xl font-medium">Latest Blogs</h1>
-                <p className="mt-10 max-w-185 m-auto text-xs sm:text-base">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas aut sunt aliquid consequuntur, exercitationem deleniti porro veritatis ad, impedit eius saepe temporibus reprehenderit perspiciatis! Mollitia magni ipsam eum. Et, modi.</p>
-                <form onSubmit={onSubmitHandler} className="flex justify-between max-w-125 scale-75 sm:scale-100 mx-auto mt-10 border border-black shadow-[-7px_7px_0px_#000000]" action="">
-                    <input onChange={(e) => {setEmail(e.target.value)}} value={email} type="email" placeholder="Enter your e-mail" className="pl-4 outline-none"/>
-                    <button type="submit" className="border border-black py-4 px-4 sm:px-8 active:bg-gray-600 active:text-white">Subscribe</button>
+
+            <div className="text-center px-5 pb-16 pt-6">
+                <h1 className="text-4xl sm:text-6xl font-semibold tracking-tight">Where Next?</h1>
+                <p className="mt-4 max-w-xl mx-auto text-sm sm:text-base text-(--text-secondary)">
+                    Stories, guides, and ideas worth reading — curated for the curious.
+                </p>
+                <form onSubmit={onSubmitHandler} className="flex max-w-md mx-auto mt-8 border border-(--border-color) rounded-full overflow-hidden bg-(--bg-secondary)">
+                    <input
+                        onChange={(e) => {setEmail(e.target.value)}}
+                        value={email}
+                        type="email"
+                        placeholder="Enter your e-mail"
+                        className="flex-1 px-5 py-3 bg-transparent outline-none text-sm"
+                    />
+                    <button type="submit" className="px-6 py-3 bg-(--text-primary) text-(--bg-primary) text-sm font-medium">
+                        Subscribe
+                    </button>
                 </form>
             </div>
         </div>

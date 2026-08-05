@@ -42,20 +42,22 @@ export default function Page () {
     }, [])
 
     return (
-        <div className="flex-1 pt-5 px-5 sm:pt-12 sm:pl-16">
-            <h1>All Blogs</h1>
-            <div className="relative max-w-212.5 overflow-x-auto mt-4 border border-gray-400 scrollbar-hide">
-                <table className="w-full text-sm text-gray-500">
-                    <thead className="text-sm text-gray-700 text-left uppercase bg-gray-50">
+        <div className="flex-1 pt-5 px-5 sm:pt-12 sm:px-16 pb-16">
+            <h1 className="text-2xl font-semibold text-(--text-primary) mb-1">All Blogs</h1>
+            <p className="text-(--text-secondary) text-sm mb-6">{blogs.length} blog{blogs.length !== 1 ? "s" : ""} published</p>
+
+            <div className="relative max-w-4xl overflow-x-auto rounded-2xl border border-(--border-color) scrollbar-hide">
+                <table className="w-full text-sm">
+                    <thead className="text-xs text-(--text-secondary) text-left uppercase bg-(--bg-secondary)">
                         <tr>
-                            <th scope="col" className="hidden sm:block px-6 py-3">Author name</th>
-                            <th scope="col" className="px-6 py-3">Blog Title</th>
-                            <th scope="col" className="px-6 py-3">Blog Date</th>
-                            <th scope="col" className="px-6 py-3">Action</th>
+                            <th scope="col" className="hidden sm:table-cell px-6 py-4">Author name</th>
+                            <th scope="col" className="px-6 py-4">Blog Title</th>
+                            <th scope="col" className="px-6 py-4">Blog Date</th>
+                            <th scope="col" className="px-6 py-4">Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {blogs.map((item, index) => {
+                    <tbody className="divide-y divide-(--border-color)">
+                        {blogs.map((item) => {
                             return <BlogTableItem key={item._id} mongoId={item._id} title={item.title} authorImg={item.authorImg} author={item.author} date={item.createdAt} deleteBlog={deleteBlog}/>
                         })}
                     </tbody>

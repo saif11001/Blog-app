@@ -12,7 +12,6 @@ export interface Blog {
     updatedAt: string;
 }
 
-import { blog_data } from "@/Assets/assets";
 import BlogItem from "./BlogItem";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -29,17 +28,28 @@ export default function BlogList () {
     useEffect(() => {
         fetchBlogs();
     }, [])
+
+    const categories = ['All', 'Technology', 'Startup', 'Lifestyle'];
+
     return (
-        <div>
-            <div className="flex justify-center gap-6 my-10">
-                <button onClick={() => setMenu('All')} className={menu === "All" ? "bg-black text-white py-1 px-4 rounded-sm" : ""}>All</button>
-                <button onClick={() => setMenu('Technology')} className={menu === "Technology" ? "bg-black text-white py-1 px-4 rounded-sm" : ""}>Technology</button>
-                <button onClick={() => setMenu('Startup')} className={menu === "Startup" ? "bg-black text-white py-1 px-4 rounded-sm" : ""}>Startup</button>
-                <button onClick={() => setMenu('Lifestyle')} className={menu === "Lifestyle" ? "bg-black text-white py-1 px-4 rounded-sm" : ""}>Lifestyle</button>
+        <div className="bg-(--bg-primary) px-5 md:px-12 lg:px-28 py-12">
+            <div className="flex justify-center gap-3 mb-10 flex-wrap">
+                {categories.map((cat) => (
+                    <button
+                        key={cat}
+                        onClick={() => setMenu(cat)}
+                        className={`px-4 py-2 text-sm rounded-full border transition-colors ${
+                            menu === cat
+                                ? "bg-(--text-primary) text-(--bg-primary) border-(--text-primary)"
+                                : "border-(--border-color) text-(--text-secondary) hover:bg-(--bg-secondary)"
+                        }`}
+                    >
+                        {cat}
+                    </button>
+                ))}
             </div>
 
-            <div className="flex flex-wrap justify-around gap-1 gap-y-10 mb-16 xl:mx-24">
-                
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
                 {blogs.filter((item) => menu === "All"?true:item.category===menu).map((item) => (
                     <BlogItem key={item._id} item={item} />
                 ))}

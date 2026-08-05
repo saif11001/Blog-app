@@ -19,16 +19,25 @@ export default function Page () {
     }, []);
 
     return (
-        <div className="pt-5 px-5 sm:pt-12 sm:pl-16">
-            <h1 className="text-2xl font-semibold mb-8">Welcome back 👋</h1>
-            <div className="flex gap-6 flex-wrap">
-                <Link href="/admin/blogList" className="border border-black p-6 w-48 shadow-[-5px_5px_0px_#000000]">
-                    <p className="text-3xl font-bold">{blogCount}</p>
-                    <p className="text-gray-500 mt-1">Total Blogs</p>
+        <div className="min-h-[calc(100vh-72px)] flex flex-col items-center justify-center px-5">
+            <h1 className="text-2xl font-semibold mb-1 text-(--text-primary)">Welcome back 👋</h1>
+            <p className="text-(--text-secondary) mb-12 text-sm">Here's a quick overview of your blog.</p>
+
+            <div className="flex gap-10 flex-wrap justify-center">
+                <Link href="/admin/blogList" className="group relative w-44 h-44 flex items-center justify-center">
+                    <div className="absolute inset-0 rounded-full border-2 border-dashed border-(--border-color) group-hover:border-(--text-secondary) animate-spin-slow transition-colors"></div>
+                    <div className="flex flex-col items-center justify-center">
+                        <p className="text-4xl font-bold text-(--text-primary)">{blogCount}</p>
+                        <p className="text-(--text-secondary) mt-1 text-sm">Total Blogs</p>
+                    </div>
                 </Link>
-                <Link href="/admin/subscriptions" className="border border-black p-6 w-48 shadow-[-5px_5px_0px_#000000]">
-                    <p className="text-3xl font-bold">{emailCount}</p>
-                    <p className="text-gray-500 mt-1">Subscribers</p>
+
+                <Link href="/admin/subscriptions" className="group relative w-44 h-44 flex items-center justify-center">
+                    <div className="absolute inset-0 rounded-full border-2 border-dashed border-(--border-color) group-hover:border-(--text-secondary) animate-spin-slow transition-colors"></div>
+                    <div className="flex flex-col items-center justify-center">
+                        <p className="text-4xl font-bold text-(--text-primary)">{emailCount}</p>
+                        <p className="text-(--text-secondary) mt-1 text-sm">Subscribers</p>
+                    </div>
                 </Link>
             </div>
         </div>
