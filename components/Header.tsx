@@ -38,7 +38,7 @@ export default function Header () {
                 <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-(--text-secondary)">
                     <a href="/" className="hover:text-(--text-primary) transition-colors">Home</a>
                     <a href="/admin" className="hover:text-(--text-primary) transition-colors">Admin</a>
-                    <a href="#" className="hover:text-(--text-primary) transition-colors">About</a>
+                    <a href="/about" className="hover:text-(--text-primary) transition-colors">About</a>
                 </nav>
 
                 <div className="flex items-center gap-3">
