@@ -93,7 +93,7 @@ export default function Header () {
                         Admin
                     </a>
                     <a
-                        href="#"
+                        href="/about"
                         onClick={() => setMenuOpen(false)}
                         className="py-3 border-b border-(--border-color) hover:text-(--text-primary) transition-colors"
                     >
