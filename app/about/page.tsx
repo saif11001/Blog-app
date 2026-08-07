@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { assets } from "@/Assets/assets";
 import {
   Sparkles,
   Lightbulb,
@@ -61,71 +62,60 @@ export default function AboutPage() {
   return (
     <>
       <Header />
-      <div className="mx-auto max-w-5xl px-6 py-16">
-        <div className="text-center">
-          <span className="inline-block rounded-full bg-gray-100 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-gray-600">
-            Our Story
-          </span>
-          <h1 className="mt-6 text-3xl font-extrabold leading-tight text-black sm:text-5xl">
-            About This Blog
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-gray-500">
-            Honest writing on startups, technology and lifestyle. This is the
-            story of how it started — and where it's headed next.
-          </p>
-        </div>
+      <div className="bg-(--bg-primary) text-(--text-primary)">
+        <div className="mx-auto max-w-5xl px-5 md:px-12 lg:px-28 py-16">
+          <div className="text-center">
+            <span className="inline-block bg-(--bg-secondary) text-(--text-secondary) text-xs font-medium px-3 py-1 rounded-full mb-5 uppercase tracking-wide">
+              Our Story
+            </span>
+            <h1 className="text-3xl sm:text-5xl font-semibold leading-tight text-(--text-primary)">
+              About This Blog
+            </h1>
+            <p className="mx-auto mt-4 max-w-xl text-sm sm:text-base text-(--text-secondary)">
+              Honest writing on startups, technology and lifestyle. This is the
+              story of how it started — and where it's headed next.
+            </p>
+          </div>
 
-        <div className="mt-24 text-center">
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
-            Our Journey
-          </p>
-          <h2 className="mt-2 text-2xl font-extrabold text-black sm:text-3xl">
-            How It All Started
-          </h2>
-          <p className="mx-auto mt-3 max-w-lg text-sm text-gray-500">
-            From a handful of posts to a blog people actually make time to
-            read — here's how it happened, step by step.
-          </p>
-        </div>
+          <div className="mt-24 text-center">
+            <p className="text-xs font-medium uppercase tracking-wide text-(--text-secondary)">
+              Our Journey
+            </p>
+            <h2 className="mt-2 text-2xl sm:text-3xl font-semibold text-(--text-primary)">
+              How It All Started
+            </h2>
+            <p className="mx-auto mt-3 max-w-lg text-sm text-(--text-secondary)">
+              From a handful of posts to a blog people actually make time to
+              read — here's how it happened, step by step.
+            </p>
+          </div>
 
-        <div className="relative mt-16">
-          <div className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gray-200 md:block" />
+          <div className="relative mt-16">
+            <div className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-(--border-color) md:block" />
 
-          <div className="space-y-16">
-            {journey.map((step, i) => {
-              const isEven = i % 2 === 0;
-              return (
-                <div
-                  key={step.title}
-                  className={`relative flex flex-col items-center gap-8 md:flex-row ${
-                    isEven ? "" : "md:flex-row-reverse"
-                  }`}
-                >
-                  <div className="w-full md:w-1/2">
-                    <div className="overflow-hidden rounded-[40px] border-4 border-black">
-                      <Image
-                        src={step.image}
-                        alt={step.title}
-                        width={500}
-                        height={260}
-                        className="h-65 w-full object-cover"
-                      />
+            <div className="space-y-16">
+              {journey.map((step, i) => {
+                const isEven = i % 2 === 0;
+                return (
+                  <div
+                    key={step.title}
+                    className={`relative flex flex-col items-center gap-8 md:flex-row ${
+                      isEven ? "" : "md:flex-row-reverse"
+                    }`}
+                  >
+                    <div className="w-full md:w-1/2">
+                      <div className="relative h-56 sm:h-65 rounded-2xl overflow-hidden border border-(--border-color)">
+                        <Image
+                          src={step.image}
+                          alt={step.title}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="absolute left-1/2 top-6 z-10 hidden h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full bg-white text-black ring-4 ring-white md:flex">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-b from-gray-800 via-gray-700 to-black text-white">
-                      {step.icon === "TrendingUp" ? (
-                        <TrendingUp size={20} />
-                      ) : (
-                        step.icon
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="w-full md:w-1/2">
-                    <div className="flex items-center gap-3 md:hidden">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-linear-to-b from-gray-800 via-gray-700 to-black text-white">
+                    <div className="absolute left-1/2 top-6 z-10 hidden h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full bg-(--bg-primary) ring-4 ring-(--bg-primary) md:flex">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-(--text-primary) text-(--bg-primary)">
                         {step.icon === "TrendingUp" ? (
                           <TrendingUp size={20} />
                         ) : (
@@ -133,64 +123,76 @@ export default function AboutPage() {
                         )}
                       </div>
                     </div>
-                    <h3 className="mt-3 text-xl font-bold text-black md:mt-0">
-                      {step.title}
-                    </h3>
-                    <p className="mt-3 text-sm leading-6 text-gray-500">
-                      {step.text}
+
+                    <div className="w-full md:w-1/2">
+                      <div className="flex items-center gap-3 md:hidden">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-(--text-primary) text-(--bg-primary)">
+                          {step.icon === "TrendingUp" ? (
+                            <TrendingUp size={20} />
+                          ) : (
+                            step.icon
+                          )}
+                        </div>
+                      </div>
+                      <h3 className="mt-3 text-xl font-semibold text-(--text-primary) md:mt-0">
+                        {step.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-6 text-(--text-secondary)">
+                        {step.text}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="mt-28 text-center">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-(--text-primary)">
+              Who's Behind the Blog
+            </h2>
+
+            <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
+              {team.map((member) => (
+                <div
+                  key={member.name}
+                  className="overflow-hidden rounded-2xl border border-(--border-color) bg-(--bg-secondary) sm:col-start-2"
+                >
+                  <div className="relative h-64 w-full">
+                    <Image
+                      src={assets.author_img00}
+                      alt={member.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="px-4 py-4 text-left">
+                    <p className="text-sm font-semibold text-(--text-primary)">
+                      {member.name}
                     </p>
+                    <p className="text-xs text-(--text-secondary)">{member.role}</p>
                   </div>
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
-        </div>
 
-        <div className="mt-28 text-center">
-          <h2 className="text-2xl font-extrabold text-black sm:text-3xl">
-            Who's Behind the Blog
-          </h2>
-
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {team.map((member) => (
-              <div
-                key={member.name}
-                className="overflow-hidden rounded-3xl border border-gray-100 bg-white sm:col-start-2"
-              >
-                <Image
-                  src={member.image}
-                  alt={member.name}
-                  width={300}
-                  height={256}
-                  className="h-64 w-full object-cover"
-                />
-                <div className="bg-linear-to-b from-gray-800 via-gray-700 to-black px-4 py-4 text-left">
-                  <p className="text-sm font-semibold text-white">
-                    {member.name}
-                  </p>
-                  <p className="text-xs text-gray-300">{member.role}</p>
-                </div>
-              </div>
-            ))}
+          <div className="mt-24 text-center">
+            <h2 className="text-2xl font-semibold text-(--text-primary)">
+              Enjoying the blog so far?
+            </h2>
+            <Link
+              href="/"
+              className="mt-6 inline-block rounded-full bg-(--text-primary) text-(--bg-primary) px-10 py-3.5 text-sm font-medium transition hover:opacity-90"
+            >
+              Read the Latest Posts
+            </Link>
           </div>
-        </div>
 
-        <div className="mt-24 text-center">
-          <h2 className="text-2xl font-bold text-black">
-            Enjoying the blog so far?
-          </h2>
-          <Link
-            href="/"
-            className="mt-6 inline-block rounded-full bg-linear-to-b from-gray-800 via-gray-700 to-black px-10 py-3.5 text-sm font-semibold text-white transition hover:opacity-90"
-          >
-            Read the Latest Posts
-          </Link>
+          <div className="h-16" />
         </div>
-
-        <div className="h-16" />
       </div>
       <Footer />
     </>
   );
 }
-
