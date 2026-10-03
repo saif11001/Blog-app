@@ -30,14 +30,23 @@ interface PageProps {
 export default function Page ({params}: PageProps) {
     const { id } = use(params);
     const [data, setData] = useState<Blog | null>(null);
+    const [notFound, setNotFound] = useState(false);
     
     const fetchData = async () => {
-        const response = await axios.get('/api/blog', {
-            params: {
-                id: id,
+        try {
+            const response = await axios.get('/api/blog', {
+                params: {
+                    id: id,
+                }
+            })
+            if (response.data) {
+                setData(response.data)
+            } else {
+                setNotFound(true)
             }
-        })
-        setData(response.data)
+        } catch {
+            setNotFound(true)
+        }
     }
     
     useEffect(() => {
@@ -53,7 +62,7 @@ export default function Page ({params}: PageProps) {
 
             <div className="flex justify-between items-center px-5 md:px-12 lg:px-28 py-5 border-b border-(--border-color)">
                 <Link href="/" className="flex items-center gap-2">
-                    <Image src={assets.logo} width={150} height={150} alt="Logo" className="dark:invert" />
+                    <Image src={assets.logo} width={150} alt="Logo" className="dark:invert" />
                 </Link>
                 <div className="flex items-center gap-3">
                     <ThemeToggle />
@@ -77,7 +86,7 @@ export default function Page ({params}: PageProps) {
                     </h1>
                     <div className="flex items-center justify-center gap-3">
                         <Image
-                            className="rounded-full object-cover"
+                            className="rounded-full object-cover w-14.5 h-14.5 shrink-0"
                             src={data.authorImg}
                             alt=""
                             width={58}
@@ -97,6 +106,7 @@ export default function Page ({params}: PageProps) {
                             src={data.image}
                             alt={data.title}
                             fill
+                            sizes="(min-width: 768px) 768px, 100vw"
                         />
                     </div>
 
@@ -121,6 +131,15 @@ export default function Page ({params}: PageProps) {
 
             <Footer />
         </div> :
-        <div className="min-h-screen bg-(--bg-primary)"></div>
+        <div className="min-h-screen bg-(--bg-primary) flex flex-col items-center justify-center gap-4 px-5 text-center">
+            {notFound && (
+                <>
+                    <p className="text-(--text-primary) text-lg font-medium">Blog not found</p>
+                    <Link href="/" className="text-sm font-medium py-2 px-5 border border-(--border-color) rounded-full text-(--text-primary)">
+                        Back to Home
+                    </Link>
+                </>
+            )}
+        </div>
     )
 }

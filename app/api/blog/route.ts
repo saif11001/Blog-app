@@ -6,14 +6,37 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
     await connectDB();
 
-    const blogId = request.nextUrl.searchParams.get("id");
+    const { searchParams } = request.nextUrl;
+    const blogId = searchParams.get("id");
+
     if (blogId) {
         const blog = await Blog.findById(blogId);
         return NextResponse.json(blog);
-    } else {
+    }
+
+    const pageParam = searchParams.get("page");
+
+    // من غير page: نرجّع كل البلوجات زي الأول (لوحة الأدمن بتستخدمها)
+    if (!pageParam) {
         const blogs = await Blog.find({}).sort({ createdAt: -1 });
         return NextResponse.json({ blogs });
     }
+
+    const page = Math.max(1, parseInt(pageParam, 10) || 1);
+    const limit = Math.min(20, Math.max(1, parseInt(searchParams.get("limit") || "3", 10) || 3));
+    const category = searchParams.get("category");
+    const filter = category && category !== "All" ? { category } : {};
+
+    // بنجيب واحد زيادة عشان نعرف لو فيه صفحة تانية
+    const found = await Blog.find(filter)
+        .sort({ createdAt: -1, _id: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit + 1);
+
+    const hasMore = found.length > limit;
+    const blogs = found.slice(0, limit);
+
+    return NextResponse.json({ blogs, hasMore });
 }
 
 export async function POST(request: NextRequest) {

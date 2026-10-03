@@ -14,11 +14,12 @@ interface BlogItemProps {
 
 export default function BlogItem ({ item } : BlogItemProps) {
     return (
-        <Link href={`/blogs/${item._id}`} className="group relative block rounded-2xl overflow-hidden h-80">
+        <Link href={`/blogs/${item._id}`} className="group relative block rounded-2xl overflow-hidden isolate h-80">
             <Image
                 src={item.image}
                 alt={item.title}
                 fill
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
 

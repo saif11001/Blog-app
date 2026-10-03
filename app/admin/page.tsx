@@ -19,7 +19,7 @@ export default function Page () {
     }, []);
 
     return (
-        <div className="min-h-[calc(100vh-72px)] flex flex-col items-center justify-center px-5">
+        <div className="flex-1 flex flex-col items-center justify-center px-5">
             <h1 className="text-2xl font-semibold mb-1 text-(--text-primary)">Welcome back 👋</h1>
             <p className="text-(--text-secondary) mb-12 text-sm">Here's a quick overview of your blog.</p>
 

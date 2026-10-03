@@ -30,7 +30,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
             <div
                 className={`
-                    flex flex-col bg-(--bg-secondary) h-screen border-r border-(--border-color)
+                    flex flex-col bg-(--bg-secondary) h-dvh border-r border-(--border-color)
                     fixed sm:sticky top-0 left-0 z-40
                     w-64 shrink-0
                     transition-transform duration-300

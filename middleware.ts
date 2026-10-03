@@ -7,7 +7,8 @@ const PROTECTED_API_RULES: { path: string; methods: string[] }[] = [
 
 export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
-    const isLoggedIn = request.cookies.get("admin_auth")?.value === process.env.ADMIN_PASSWORD;
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    const isLoggedIn = !!adminPassword && request.cookies.get("admin_auth")?.value === adminPassword;
 
     if (isLoggedIn) {
         return NextResponse.next();
@@ -21,7 +22,6 @@ export function middleware(request: NextRequest) {
         return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
     }
 
-    // صفحات /admin (مش API) بتتحول للوجين
     if (pathname.startsWith("/admin")) {
         return NextResponse.redirect(new URL("/login", request.url));
     }

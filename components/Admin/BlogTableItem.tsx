@@ -16,7 +16,7 @@ export default function BlogTableItem ({ authorImg, title, mongoId, author, date
     return (
         <tr className="bg-(--bg-primary) hover:bg-(--bg-secondary) transition-colors">
             <th scope="row" className="items-center gap-3 hidden sm:flex px-6 py-4 font-medium text-(--text-primary) whitespace-nowrap">
-                <Image className="rounded-full" src={authorImg ? authorImg : assets.profile_icon} alt="" width={36} height={36} />
+                <Image className="rounded-full object-cover w-9 h-9 shrink-0" src={authorImg ? authorImg : assets.profile_icon} alt="" width={36} height={36} />
                 <p>{author ? author : "No author" }</p>
             </th>
             <td className="px-6 py-4 text-(--text-primary)">

@@ -6,15 +6,19 @@ import Image from "next/image"
 import { useState } from "react"
 import { toast } from "react-toastify";
 
+
+const AUTHOR_IMG = "https://res.cloudinary.com/a57m0ysa/image/upload/v1791044973/author_img_kpzprh.jpg";
+
 export default function Page() {
     const [image, setImage] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
+    const [inputKey, setInputKey] = useState(0);
     const [data, setData] = useState({
         title: "",
         description: "",
         category: "Startup",
         author: "Saif El-Deen",
-        authorImg: "/author_img.png"
+        authorImg: AUTHOR_IMG
     })
 
     const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -45,18 +49,19 @@ export default function Page() {
             if (response.data.success) {
                 toast.success(response.data.message);
                 setImage(null);
+                setInputKey((k) => k + 1);
                 setData({
                     title: "",
                     description: "",
                     category: "Startup",
                     author: "Saif El-Deen",
-                    authorImg: "/author_img.png"
+                    authorImg: AUTHOR_IMG
                 })
             } else {
                 toast.error("Error");
             }
-        } catch (error) {
-            toast.error("Something went wrong");
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message || "Something went wrong");
         } finally {
             setLoading(false);
         }
@@ -106,7 +111,7 @@ export default function Page() {
                             />
                         </div>
                     </label>
-                    <input type="file" id="image" hidden required onChange={(e) => { if (e.target.files?.[0]) setImage(e.target.files[0]) }} accept="image/*" />
+                    <input key={inputKey} type="file" id="image" hidden required onChange={(e) => { if (e.target.files?.[0]) setImage(e.target.files[0]) }} accept="image/*" />
                 </div>
 
                 <div className="area-catrow flex items-center justify-between">
