@@ -4,7 +4,7 @@ import { assets } from "@/Assets/assets"
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { Plane, Camera, MapPin, Sparkles, BookText } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
@@ -13,6 +13,18 @@ export default function Header () {
 
     const [email, setEmail] = useState("");
     const [menuOpen, setMenuOpen] = useState(false);
+    const emailInputRef = useRef<HTMLInputElement>(null);
+
+    // The "Subscribe" buttons in the header take the visitor to the email form
+    const focusSubscribe = () => {
+        const wasOpen = menuOpen;
+        setMenuOpen(false);
+        emailInputRef.current?.focus({ preventScroll: true });
+        // wait for the mobile menu to finish closing so the scroll lands in the right place
+        setTimeout(() => {
+            emailInputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, wasOpen ? 320 : 0);
+    };
 
     const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -45,7 +57,11 @@ export default function Header () {
 
                 <div className="flex items-center gap-3">
                     <ThemeToggle />
-                    <button className="hidden sm:flex items-center gap-2 text-sm font-medium py-2 px-5 border border-(--border-color) rounded-full hover:bg-(--bg-secondary) transition-colors">
+                    <button
+                        type="button"
+                        onClick={focusSubscribe}
+                        className="hidden sm:flex items-center gap-2 text-sm font-medium py-2 px-5 border border-(--border-color) rounded-full hover:bg-(--bg-secondary) transition-colors"
+                    >
                         Subscribe
                     </button>
 
@@ -102,7 +118,8 @@ export default function Header () {
                         About
                     </a>
                     <button
-                        onClick={() => setMenuOpen(false)}
+                        type="button"
+                        onClick={focusSubscribe}
                         className="mt-3 flex items-center justify-center gap-2 text-sm font-medium py-2 px-5 border border-(--border-color) rounded-full hover:bg-(--bg-secondary) transition-colors sm:hidden"
                     >
                         Subscribe
@@ -167,6 +184,8 @@ export default function Header () {
                     </p>
                     <form onSubmit={onSubmitHandler} className="flex max-w-md mx-auto mt-8 border border-(--border-color) rounded-full overflow-hidden bg-(--bg-secondary)">
                         <input
+                            ref={emailInputRef}
+                            autoComplete="email"
                             onChange={(e) => {setEmail(e.target.value)}}
                             value={email}
                             type="email"
