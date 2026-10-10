@@ -4,6 +4,7 @@ import BlogTableItem from "@/components/Admin/BlogTableItem"
 import axios from "axios";
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify";
+import { handleAdminError } from "@/lib/adminError";
 
 interface Blog {
     _id: string;
@@ -19,21 +20,33 @@ interface Blog {
 export default function Page () {
 
     const [blogs, setBlogs] = useState<Blog[]>([]);
+    const [loading, setLoading] = useState(true);
 
     const fetchBlogs = async () => {
-        const response = await axios.get('/api/blog');
-        setBlogs(response.data.blogs);
+        try {
+            const response = await axios.get('/api/blog');
+            setBlogs(response.data.blogs);
+        } catch (error) {
+            handleAdminError(error, "Could not load the blogs");
+        } finally {
+            setLoading(false);
+        }
     }
 
     const deleteBlog = async (mongoId: string) => {
-        const response = await axios.delete('/api/blog', {
-            params: {
-                id: mongoId
-            }
-        });
-        toast.success(response.data.message);
-        
-        fetchBlogs();
+        if (!window.confirm("Delete this blog? This can't be undone.")) return;
+
+        try {
+            const response = await axios.delete('/api/blog', {
+                params: {
+                    id: mongoId
+                }
+            });
+            toast.success(response.data.message);
+            fetchBlogs();
+        } catch (error) {
+            handleAdminError(error, "Could not delete the blog");
+        }
     }
 
     useEffect(() => {
@@ -44,7 +57,7 @@ export default function Page () {
     return (
         <div className="flex-1 pt-5 px-5 sm:pt-12 sm:px-16 pb-16">
             <h1 className="text-2xl font-semibold text-(--text-primary) mb-1">All Blogs</h1>
-            <p className="text-(--text-secondary) text-sm mb-6">{blogs.length} blog{blogs.length !== 1 ? "s" : ""} published</p>
+            <p className="text-(--text-secondary) text-sm mb-6">{loading ? "Loading..." : `${blogs.length} blog${blogs.length !== 1 ? "s" : ""} published`}</p>
 
             <div className="relative max-w-4xl overflow-x-auto rounded-2xl border border-(--border-color) scrollbar-hide">
                 <table className="w-full text-sm">
