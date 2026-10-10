@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { handleAdminError } from "@/lib/adminError";
 
 export default function Page () {
     const [blogCount, setBlogCount] = useState(0);
@@ -10,10 +11,16 @@ export default function Page () {
 
     useEffect(() => {
         const fetchStats = async () => {
-            const blogsRes = await axios.get('/api/blog');
-            const emailsRes = await axios.get('/api/email');
-            setBlogCount(blogsRes.data.blogs.length);
-            setEmailCount(emailsRes.data.emails.length);
+            try {
+                const [blogsRes, emailsRes] = await Promise.all([
+                    axios.get('/api/blog'),
+                    axios.get('/api/email'),
+                ]);
+                setBlogCount(blogsRes.data.blogs.length);
+                setEmailCount(emailsRes.data.emails.length);
+            } catch (error) {
+                handleAdminError(error, "Could not load the stats");
+            }
         };
         fetchStats();
     }, []);
