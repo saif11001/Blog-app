@@ -4,6 +4,7 @@ import SubsTableItem from "@/components/Admin/SubsTableItem"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify";
+import { handleAdminError } from "@/lib/adminError";
 
 interface Email {
     _id: string;
@@ -14,23 +15,36 @@ interface Email {
 export default function Page () {
 
     const [emails, setEmails] = useState<Email[]>([])
+    const [loading, setLoading] = useState(true);
 
     const fetchEmails = async () => {
-        const response = await axios.get("/api/email");
-        setEmails(response.data.emails);
+        try {
+            const response = await axios.get("/api/email");
+            setEmails(response.data.emails);
+        } catch (error) {
+            handleAdminError(error, "Could not load the subscribers");
+        } finally {
+            setLoading(false);
+        }
     }
 
     const deleteEmail = async (mongoId: string) => {
-        const response = await axios.delete('/api/email', {
-            params: {
-                id: mongoId
+        if (!window.confirm("Remove this subscriber?")) return;
+
+        try {
+            const response = await axios.delete('/api/email', {
+                params: {
+                    id: mongoId
+                }
+            })
+            if(response.data.success) {
+                toast.success(response.data.msg)
+                fetchEmails();
+            } else {
+                toast.error("Error");
             }
-        })
-        if(response.data.success) {
-            toast.success(response.data.msg)
-            fetchEmails();
-        } else {
-            toast.error("Error");
+        } catch (error) {
+            handleAdminError(error, "Could not delete the subscriber");
         }
     }
     
@@ -41,7 +55,7 @@ export default function Page () {
     return (
         <div className="flex-1 pt-5 px-5 sm:pt-12 sm:px-16 pb-16">
             <h1 className="text-2xl font-semibold text-(--text-primary) mb-1">All Subscriptions</h1>
-            <p className="text-(--text-secondary) text-sm mb-6">{emails.length} subscriber{emails.length !== 1 ? "s" : ""}</p>
+            <p className="text-(--text-secondary) text-sm mb-6">{loading ? "Loading..." : `${emails.length} subscriber${emails.length !== 1 ? "s" : ""}`}</p>
 
             <div className="relative max-w-3xl overflow-x-auto rounded-2xl border border-(--border-color) scrollbar-hide">
                 <table className="w-full text-sm">
