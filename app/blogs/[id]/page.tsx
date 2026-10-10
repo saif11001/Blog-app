@@ -132,6 +132,13 @@ export default function Page ({params}: PageProps) {
             <Footer />
         </div> :
         <div className="min-h-screen bg-(--bg-primary) flex flex-col items-center justify-center gap-4 px-5 text-center">
+            {!notFound && (
+                <div
+                    role="status"
+                    aria-label="Loading"
+                    className="h-9 w-9 rounded-full border-2 border-(--border-color) border-t-(--text-primary) animate-spin"
+                />
+            )}
             {notFound && (
                 <>
                     <p className="text-(--text-primary) text-lg font-medium">Blog not found</p>
