@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
+import { SESSION_COOKIE, getSessionSecret, verifySessionToken } from "@/lib/auth";
 
 const PROTECTED_API_RULES: { path: string; methods: string[] }[] = [
     { path: "/api/blog", methods: ["POST", "DELETE"] },
     { path: "/api/email", methods: ["GET", "DELETE"] },
 ];
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
-    const adminPassword = process.env.ADMIN_PASSWORD;
-    const isLoggedIn = !!adminPassword && request.cookies.get("admin_auth")?.value === adminPassword;
+    const isLoggedIn = await verifySessionToken(
+        request.cookies.get(SESSION_COOKIE)?.value,
+        getSessionSecret()
+    );
 
     if (isLoggedIn) {
         return NextResponse.next();
